@@ -44,7 +44,8 @@ namespace McMaster.Extensions.CommandLineUtils.Tests
         public void CommandsNamesAreCaseInsensitive()
         {
             var app = new CommandLineApplication();
-            var cmd = app.Command("TEST", c => {
+            var cmd = app.Command("TEST", c =>
+            {
                 c.OnExecute(() => 5);
             });
             cmd.AddName("TE");

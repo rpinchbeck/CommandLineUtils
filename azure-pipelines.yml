@@ -30,6 +30,10 @@ jobs:
     condition: ne(variables['kv-access-token'], '')
   - powershell: .\docs\generate.ps1 -Verbose -NoBuild
     displayName: Compile documentation
+  - powershell: >
+      dotnet tool install -g dotnet-format;
+      dotnet format --check
+    displayName: Run dotnet format
   - task: PublishTestResults@2
     displayName: Upload test results
     condition: always()

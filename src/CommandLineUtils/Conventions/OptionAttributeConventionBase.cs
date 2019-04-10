@@ -101,7 +101,7 @@ namespace McMaster.Extensions.CommandLineUtils.Conventions
                             {
                                 count[i] = true;
                             }
-                            
+
                             setter.Invoke(context.ModelAccessor.GetModel(), count);
                         }
                         else

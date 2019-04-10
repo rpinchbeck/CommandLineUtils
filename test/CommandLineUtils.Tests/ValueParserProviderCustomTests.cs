@@ -104,7 +104,7 @@ namespace McMaster.Extensions.CommandLineUtils.Tests
             ValueTuple<int, double, string>? expectedComplexValue = null;
 
             var app = new CommandLineApplication<CustomParserProgram>();
-            
+
             app.ValueParsers.Add(new ComplexTupleParser());
             app.ValueParsers.AddOrReplace(new MyDateTimeOffsetParser());
             app.ValueParsers.AddOrReplace(new MyDoubleParser());
@@ -216,7 +216,7 @@ namespace McMaster.Extensions.CommandLineUtils.Tests
         public void CustomParsersAreAvailableToSubCommands()
         {
             var expectedDate = new DateTimeOffset(2018, 02, 16, 21, 30, 33, 45, TimeSpan.FromHours(10));
-            
+
             var app = new CommandLineApplication<CustomParserProgramAttributes>();
             app.ValueParsers.AddOrReplace(new MyDateTimeOffsetParser());
             app.Conventions.UseDefaultConventions();
