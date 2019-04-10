@@ -24,7 +24,7 @@ namespace McMaster.Extensions.CommandLineUtils
         /// <summary>
         /// Initializes a new <see cref="OptionAttribute"/>.
         /// </summary>
-        /// <param name="template">The string template. <see cref="CommandOption.Template"/>.</param>
+        /// <param name="template">The string template.</param>
         public OptionAttribute(string template)
         {
             Template = template;

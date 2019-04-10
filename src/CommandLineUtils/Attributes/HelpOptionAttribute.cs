@@ -22,7 +22,7 @@ namespace McMaster.Extensions.CommandLineUtils
         /// <summary>
         /// Initializes a new <see cref="HelpOptionAttribute"/>.
         /// </summary>
-        /// <param name="template">The string template. <see cref="CommandOption.Template"/>.</param>
+        /// <param name="template">The string template.</param>
         public HelpOptionAttribute(string template)
         {
             Template = template;

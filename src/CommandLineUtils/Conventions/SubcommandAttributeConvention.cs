@@ -22,10 +22,10 @@ namespace McMaster.Extensions.CommandLineUtils.Conventions
             }
 
             var attributes = context.ModelType.GetTypeInfo().GetCustomAttributes<SubcommandAttribute>();
+            var contextArgs = new object[] { context };
 
             foreach (var attribute in attributes)
             {
-                var contextArgs = new object[] { context, attribute };
                 foreach (var type in attribute.Types)
                 {
                     var impl = s_addSubcommandMethod.MakeGenericMethod(type);
@@ -46,12 +46,10 @@ namespace McMaster.Extensions.CommandLineUtils.Conventions
             = typeof(SubcommandAttributeConvention).GetRuntimeMethods()
                 .Single(m => m.Name == nameof(AddSubcommandImpl));
 
-        private void AddSubcommandImpl<TSubCommand>(ConventionContext context, SubcommandAttribute subcommand)
+        private void AddSubcommandImpl<TSubCommand>(ConventionContext context)
             where TSubCommand : class
         {
-#pragma warning disable 618
-            context.Application.Command<TSubCommand>(subcommand.Name, subcommand.Configure);
-#pragma warning restore 618
+            context.Application.Command<TSubCommand>(null, _ => { });
         }
     }
 }

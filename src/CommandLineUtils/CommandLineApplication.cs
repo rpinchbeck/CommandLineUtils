@@ -272,7 +272,7 @@ namespace McMaster.Extensions.CommandLineUtils
         /// A response file contains additional arguments that will be treated as if they were passed in on the command line.
         /// </para>
         /// <para>
-        /// Defaults to <see cref="ResponseFileHandling.Disabled" />.
+        /// Defaults to <see cref="McMaster.Extensions.CommandLineUtils.ResponseFileHandling.Disabled" />.
         /// </para>
         /// <para>
         /// Nested response false are not supported.
@@ -875,40 +875,6 @@ namespace McMaster.Extensions.CommandLineUtils
         }
 
         /// <summary>
-        /// This method has been marked as obsolete and will be removed in a future version.
-        /// The recommended replacement is <see cref="ShowHelp()" />.
-        /// </summary>
-        /// <param name="commandName">The subcommand for which to show help. Leave null to show for the current command.</param>
-        [Obsolete("This method has been marked as obsolete and will be removed in a future version." +
-            "The recommended replacement is ShowHelp()")]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public void ShowHelp(string commandName = null)
-        {
-            if (commandName == null)
-            {
-                ShowHelp();
-            }
-            CommandLineApplication target;
-
-            if (commandName == null || string.Equals(Name, commandName, StringComparison.OrdinalIgnoreCase))
-            {
-                target = this;
-            }
-            else
-            {
-                target = Commands.SingleOrDefault(cmd => string.Equals(cmd.Name, commandName, StringComparison.OrdinalIgnoreCase));
-
-                if (target == null)
-                {
-                    // The command name is invalid so don't try to show help for something that doesn't exist
-                    target = this;
-                }
-            }
-
-            target.ShowHelp();
-        }
-
-        /// <summary>
         /// Produces help text describing command usage.
         /// </summary>
         /// <returns>The help text.</returns>
@@ -917,37 +883,6 @@ namespace McMaster.Extensions.CommandLineUtils
             var sb = new StringBuilder();
             _helpTextGenerator.Generate(this, new StringWriter(sb));
             return sb.ToString();
-        }
-
-        /// <summary>
-        /// This method has been marked as obsolete and will be removed in a future version.
-        /// The recommended replacement is <see cref="GetHelpText()" />
-        /// </summary>
-        /// <param name="commandName"></param>
-        /// <returns></returns>
-        [Obsolete("This method has been marked as obsolete and will be removed in a future version." +
-            "The recommended replacement is GetHelpText()")]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public virtual string GetHelpText(string commandName = null)
-        {
-            CommandLineApplication target;
-
-            if (commandName == null || string.Equals(Name, commandName, StringComparison.OrdinalIgnoreCase))
-            {
-                target = this;
-            }
-            else
-            {
-                target = Commands.SingleOrDefault(cmd => string.Equals(cmd.Name, commandName, StringComparison.OrdinalIgnoreCase));
-
-                if (target == null)
-                {
-                    // The command name is invalid so don't try to show help for something that doesn't exist
-                    target = this;
-                }
-            }
-
-            return target.GetHelpText();
         }
 
         /// <summary>
