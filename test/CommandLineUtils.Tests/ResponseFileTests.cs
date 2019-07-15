@@ -232,8 +232,11 @@ namespace McMaster.Extensions.CommandLineUtils.Tests
         {
             var app = new CommandLineApplication
             {
-                ThrowOnUnexpectedArgument = false,
-                ParserConfig = { ResponseFileHandling = ResponseFileHandling.ParseArgsAsSpaceSeparated },
+                ParserConfig =
+                {
+                    ResponseFileHandling = ResponseFileHandling.ParseArgsAsSpaceSeparated,
+                    UnrecognizedArgumentHandling = UnrecognizedArgumentHandling.StopAndCollectRemainingArguments,
+                },
                 AllowArgumentSeparator = true,
             };
             app.Execute("--", "@somepath.txt");
@@ -247,8 +250,11 @@ namespace McMaster.Extensions.CommandLineUtils.Tests
         {
             var app = new CommandLineApplication
             {
-                ThrowOnUnexpectedArgument = false,
-                ParserConfig = { ResponseFileHandling = ResponseFileHandling.ParseArgsAsSpaceSeparated },
+                ParserConfig =
+                {
+                    ResponseFileHandling = ResponseFileHandling.ParseArgsAsSpaceSeparated,
+                    UnrecognizedArgumentHandling = UnrecognizedArgumentHandling.StopAndCollectRemainingArguments,
+                },
                 AllowArgumentSeparator = true,
             };
             var rspFile = CreateResponseFile("-- --hello");
@@ -279,9 +285,13 @@ namespace McMaster.Extensions.CommandLineUtils.Tests
         [Fact]
         public void HandlesResponseFilesWhenGivenAsOptionArg()
         {
-            var app = new CommandLineApplication(throwOnUnexpectedArg: false)
+            var app = new CommandLineApplication
             {
-                ParserConfig = { ResponseFileHandling = ResponseFileHandling.ParseArgsAsSpaceSeparated }
+                ParserConfig =
+                {
+                    ResponseFileHandling = ResponseFileHandling.ParseArgsAsSpaceSeparated,
+                    UnrecognizedArgumentHandling = UnrecognizedArgumentHandling.StopAndCollectRemainingArguments,
+                }
             };
             var opt = app.Option("--message <MESSAGE>", "Message", CommandOptionType.SingleValue);
             var rspFile = CreateResponseFile(" 'lorem ipsum' ", "dolor sit amet");

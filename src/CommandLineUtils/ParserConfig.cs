@@ -109,5 +109,11 @@ namespace McMaster.Extensions.CommandLineUtils
         /// </para>
         /// </summary>
         public ResponseFileHandling ResponseFileHandling { get; set; }
+
+        /// <summary>
+        /// Set the behavior for how to handle unrecognized arguments.
+        /// </summary>
+        public UnrecognizedArgumentHandling UnrecognizedArgumentHandling { get; set; } =
+            UnrecognizedArgumentHandling.Throw;
     }
 }

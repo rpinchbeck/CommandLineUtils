@@ -87,8 +87,17 @@ namespace McMaster.Extensions.CommandLineUtils
         public string? ExtendedHelpText { get; set; }
 
         /// <summary>
+        /// <para>
+        /// This property is obsolete and will be removed in a future version.
+        /// The recommended replacement is <seealso cref="ParserConfig.UnrecognizedArgumentHandling"/>.
+        /// </para>
+        /// <para>
         /// Throw when unexpected arguments are encountered. <seealso cref="CommandLineApplication.ThrowOnUnexpectedArgument"/>
+        /// </para>
         /// </summary>
+        [Obsolete("This property is obsolete and will be removed in a future version. " +
+            "The recommended replacement is ParserConfig.UnrecognizedArgumentHandling.")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public bool ThrowOnUnexpectedArgument { get; set; } = true;
 
         /// <summary>
@@ -177,11 +186,11 @@ namespace McMaster.Extensions.CommandLineUtils
             app.ExtendedHelpText = ExtendedHelpText;
             app.FullName = FullName;
             app.ShowInHelpText = ShowInHelpText;
+#pragma warning disable 0618
             app.ThrowOnUnexpectedArgument = ThrowOnUnexpectedArgument;
-            #pragma warning disable 0618
             app.ResponseFileHandling = ResponseFileHandling;
             app.ParserConfig.OptionsComparison = OptionsComparison;
-            #pragma warning restore 0618
+#pragma warning restore 0618
             app.ValueParsers.ParseCulture = ParseCulture;
 
             if (_clusterOptions.HasValue)

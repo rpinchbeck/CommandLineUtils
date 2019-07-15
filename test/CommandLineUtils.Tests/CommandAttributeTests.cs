@@ -7,7 +7,7 @@ namespace McMaster.Extensions.CommandLineUtils.Tests
 {
     public class CommandAttributeTests
     {
-        [Command(AllowArgumentSeparator = true, ThrowOnUnexpectedArgument = false)]
+        [Command(AllowArgumentSeparator = true)]
         private class ParsingOptions
         { }
 
@@ -18,7 +18,6 @@ namespace McMaster.Extensions.CommandLineUtils.Tests
             app.Conventions.UseCommandAttribute();
 
             Assert.True(app.AllowArgumentSeparator);
-            Assert.False(app.ThrowOnUnexpectedArgument);
         }
     }
 }

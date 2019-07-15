@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
+using System.ComponentModel;
 using McMaster.Extensions.CommandLineUtils.Abstractions;
 using McMaster.Extensions.CommandLineUtils.Conventions;
 using McMaster.Extensions.CommandLineUtils.HelpText;
@@ -20,17 +21,16 @@ namespace McMaster.Extensions.CommandLineUtils
 
 #nullable disable
         /// <summary>
-        /// Initializes a new instance of <see cref="CommandLineApplication"/>.
+        /// Initializes a new instance of <see cref="CommandLineApplication{TModel}"/>.
         /// </summary>
-        /// <param name="throwOnUnexpectedArg">Initial value for <see cref="CommandLineApplication.ThrowOnUnexpectedArgument"/>.</param>
-        public CommandLineApplication(bool throwOnUnexpectedArg = true)
-            : base(throwOnUnexpectedArg)
+        public CommandLineApplication()
+            : base()
         {
             Initialize();
         }
 
         /// <summary>
-        /// Initializes a new instance of <see cref="CommandLineApplication"/>.
+        /// Initializes a new instance of <see cref="CommandLineApplication{TModel}"/>.
         /// </summary>
         /// <param name="console">The console implementation to use.</param>
         public CommandLineApplication(IConsole console)
@@ -40,11 +40,68 @@ namespace McMaster.Extensions.CommandLineUtils
         }
 
         /// <summary>
-        /// Initializes a new instance of <see cref="CommandLineApplication"/>.
+        /// Initializes a new instance of <see cref="CommandLineApplication{TModel}"/>.
+        /// </summary>
+        /// <param name="console">The console implementation to use.</param>
+        /// <param name="workingDirectory">The current working directory.</param>
+        public CommandLineApplication(IConsole console, string workingDirectory)
+            : base(console, workingDirectory)
+        {
+            Initialize();
+        }
+
+        /// <summary>
+        /// <para>
+        /// This constructor is obsolete and will be removed in a future version.
+        /// The recommended replacement is <see cref="CommandLineApplication{TModel}(IHelpTextGenerator, IConsole, string)" />
+        /// </para>
+        /// <para>
+        /// Initializes a new instance of <see cref="CommandLineApplication{TModel}"/>.
+        /// </para>
+        /// </summary>
+        /// <param name="helpTextGenerator">The help text generator to use.</param>
+        /// <param name="console">The console implementation to use.</param>
+        /// <param name="workingDirectory">The current working directory.</param>
+        public CommandLineApplication(IHelpTextGenerator helpTextGenerator, IConsole console, string workingDirectory)
+            : base(helpTextGenerator, console, workingDirectory)
+        {
+            Initialize();
+        }
+
+        /// <summary>
+        /// <para>
+        /// This constructor is obsolete and will be removed in a future version.
+        /// The recommended replacement is <see cref="CommandLineApplication{TModel}()" />
+        /// </para>
+        /// <para>
+        /// Initializes a new instance of <see cref="CommandLineApplication{TModel}"/>.
+        /// </para>
+        /// </summary>
+        /// <param name="throwOnUnexpectedArg">Initial value for <see cref="CommandLineApplication.ThrowOnUnexpectedArgument"/>.</param>
+        [Obsolete("This constructor is obsolete and will be removed in a future version. " +
+            "The recommended replacement is CommandLineApplication<T>() and ParserConfig.UnrecognizedArgumentHandling")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public CommandLineApplication(bool throwOnUnexpectedArg)
+            : base(throwOnUnexpectedArg)
+        {
+            Initialize();
+        }
+
+        /// <summary>
+        /// <para>
+        /// This constructor is obsolete and will be removed in a future version.
+        /// The recommended replacement is <see cref="CommandLineApplication{TModel}(IConsole, string)" />
+        /// </para>
+        /// <para>
+        /// Initializes a new instance of <see cref="CommandLineApplication{TModel}"/>.
+        /// </para>
         /// </summary>
         /// <param name="console">The console implementation to use.</param>
         /// <param name="workingDirectory">The current working directory.</param>
         /// <param name="throwOnUnexpectedArg">Initial value for <see cref="CommandLineApplication.ThrowOnUnexpectedArgument"/>.</param>
+        [Obsolete("This constructor is obsolete and will be removed in a future version. " +
+            "The recommended replacement is CommandLineApplication<T>(IConsole, string) and ParserConfig.UnrecognizedArgumentHandling")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public CommandLineApplication(IConsole console, string workingDirectory, bool throwOnUnexpectedArg)
             : base(console, workingDirectory, throwOnUnexpectedArg)
         {
@@ -52,12 +109,21 @@ namespace McMaster.Extensions.CommandLineUtils
         }
 
         /// <summary>
-        /// Initializes a new instance of <see cref="CommandLineApplication"/>.
+        /// <para>
+        /// This constructor is obsolete and will be removed in a future version.
+        /// The recommended replacement is <see cref="CommandLineApplication{TModel}(IHelpTextGenerator, IConsole, string)" />
+        /// </para>
+        /// <para>
+        /// Initializes a new instance of <see cref="CommandLineApplication{TModel}"/>.
+        /// </para>
         /// </summary>
         /// <param name="helpTextGenerator">The help text generator to use.</param>
         /// <param name="console">The console implementation to use.</param>
         /// <param name="workingDirectory">The current working directory.</param>
         /// <param name="throwOnUnexpectedArg">Initial value for <see cref="CommandLineApplication.ThrowOnUnexpectedArgument"/>.</param>
+        [Obsolete("This constructor is obsolete and will be removed in a future version. " +
+            "The recommended replacement is CommandLineApplication<T>(IHelpTextGenerator, IConsole, string) and ParserConfig.UnrecognizedArgumentHandling")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public CommandLineApplication(IHelpTextGenerator helpTextGenerator, IConsole console, string workingDirectory, bool throwOnUnexpectedArg)
             : base(helpTextGenerator, console, workingDirectory, throwOnUnexpectedArg)
         {

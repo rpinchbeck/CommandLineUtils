@@ -588,9 +588,13 @@ namespace McMaster.Extensions.CommandLineUtils.Tests
         [InlineData(new[] { "--", "--version" }, new[] { "--version" }, null)]
         public void ArgumentSeparator(string[] input, string[] expectedRemaining, string topLevelValue)
         {
-            var app = new CommandLineApplication(throwOnUnexpectedArg: false)
+            var app = new CommandLineApplication
             {
-                AllowArgumentSeparator = true
+                AllowArgumentSeparator = true,
+                ParserConfig =
+                {
+                    UnrecognizedArgumentHandling = UnrecognizedArgumentHandling.StopAndCollectRemainingArguments,
+                }
             };
             var optHelp = app.HelpOption("--help");
             var optVersion = app.VersionOption("--version", "1", "1.0");
@@ -680,10 +684,14 @@ namespace McMaster.Extensions.CommandLineUtils.Tests
         [Fact]
         public void HelpTextShowsArgSeparator()
         {
-            var app = new CommandLineApplication(throwOnUnexpectedArg: false)
+            var app = new CommandLineApplication
             {
                 Name = "proxy-command",
-                AllowArgumentSeparator = true
+                AllowArgumentSeparator = true,
+                ParserConfig =
+                {
+                    UnrecognizedArgumentHandling = UnrecognizedArgumentHandling.StopAndCollectRemainingArguments,
+                }
             };
             app.HelpOption("-h|--help");
             Assert.Contains("Usage: proxy-command [options] [[--] <arg>...]", app.GetHelpText());
@@ -913,9 +921,9 @@ Examples:
         [Fact]
         public void PathCanBeRelativeOrAbsolute()
         {
-            new CommandLineApplication(NullConsole.Singleton, "/path", false);
-            new CommandLineApplication(NullConsole.Singleton, "C:/path", false);
-            new CommandLineApplication(NullConsole.Singleton, "../path", false);
+            new CommandLineApplication(NullConsole.Singleton, "/path");
+            new CommandLineApplication(NullConsole.Singleton, "C:/path");
+            new CommandLineApplication(NullConsole.Singleton, "../path");
         }
 
         [Fact]
@@ -981,7 +989,13 @@ Examples:
         [Fact]
         public void CommandNamesMatchingIsCaseInsensitive()
         {
-            var app = new CommandLineApplication(throwOnUnexpectedArg: false);
+            var app = new CommandLineApplication
+            {
+                ParserConfig =
+                {
+                    UnrecognizedArgumentHandling = UnrecognizedArgumentHandling.StopAndCollectRemainingArguments,
+                }
+            };
             var cmd = app.Command("CMD1", _ => { });
 
             Assert.Same(cmd, app.Parse("CMD1").SelectedCommand);

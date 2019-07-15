@@ -42,9 +42,8 @@ namespace McMaster.Extensions.CommandLineUtils
         /// <summary>
         /// Initializes a new instance of <see cref="CommandLineApplication"/>.
         /// </summary>
-        /// <param name="throwOnUnexpectedArg">Initial value for <see cref="ThrowOnUnexpectedArgument"/>.</param>
-        public CommandLineApplication(bool throwOnUnexpectedArg = true)
-            : this(null, DefaultHelpTextGenerator.Singleton, new DefaultCommandLineContext(), throwOnUnexpectedArg)
+        public CommandLineApplication()
+            : this(null, DefaultHelpTextGenerator.Singleton, new DefaultCommandLineContext(), throwOnUnexpectedArg: true)
         {
         }
 
@@ -61,9 +60,8 @@ namespace McMaster.Extensions.CommandLineUtils
         /// </summary>
         /// <param name="console">The console implementation to use.</param>
         /// <param name="workingDirectory">The current working directory.</param>
-        /// <param name="throwOnUnexpectedArg">Initial value for <see cref="ThrowOnUnexpectedArgument"/>.</param>
-        public CommandLineApplication(IConsole console, string workingDirectory, bool throwOnUnexpectedArg)
-            : this(null, DefaultHelpTextGenerator.Singleton, new DefaultCommandLineContext(console, workingDirectory), throwOnUnexpectedArg)
+        public CommandLineApplication(IConsole console, string workingDirectory)
+            : this(null, DefaultHelpTextGenerator.Singleton, new DefaultCommandLineContext(console, workingDirectory), throwOnUnexpectedArg: true)
         { }
 
         /// <summary>
@@ -72,7 +70,64 @@ namespace McMaster.Extensions.CommandLineUtils
         /// <param name="helpTextGenerator">The help text generator to use.</param>
         /// <param name="console">The console implementation to use.</param>
         /// <param name="workingDirectory">The current working directory.</param>
+        public CommandLineApplication(IHelpTextGenerator helpTextGenerator, IConsole console, string workingDirectory)
+            : this(null, helpTextGenerator, new DefaultCommandLineContext(console, workingDirectory), throwOnUnexpectedArg: true)
+        {
+        }
+
+        /// <summary>
+        /// <para>
+        /// This constructor is obsolete and will be removed in a future version.
+        /// The recommended replacement is <see cref="CommandLineApplication()" />
+        /// </para>
+        /// <para>
+        /// Initializes a new instance of <see cref="CommandLineApplication"/>.
+        /// </para>
+        /// </summary>
         /// <param name="throwOnUnexpectedArg">Initial value for <see cref="ThrowOnUnexpectedArgument"/>.</param>
+        [Obsolete("This constructor is obsolete and will be removed in a future version. " +
+            "The recommended replacement is CommandLineApplication() and ParserConfig.UnrecognizedArgumentHandling")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public CommandLineApplication(bool throwOnUnexpectedArg)
+            : this(null, DefaultHelpTextGenerator.Singleton, new DefaultCommandLineContext(), throwOnUnexpectedArg)
+        {
+        }
+
+        /// <summary>
+        /// <para>
+        /// This constructor is obsolete and will be removed in a future version.
+        /// The recommended replacement is <see cref="CommandLineApplication(IConsole, string)" />
+        /// </para>
+        /// <para>
+        /// Initializes a new instance of <see cref="CommandLineApplication"/>.
+        /// </para>
+        /// </summary>
+        /// <param name="console">The console implementation to use.</param>
+        /// <param name="workingDirectory">The current working directory.</param>
+        /// <param name="throwOnUnexpectedArg">Initial value for <see cref="ThrowOnUnexpectedArgument"/>.</param>
+        [Obsolete("This constructor is obsolete and will be removed in a future version. " +
+            "The recommended replacement is CommandLineApplication(IConsole, string) and ParserConfig.UnrecognizedArgumentHandling")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public CommandLineApplication(IConsole console, string workingDirectory, bool throwOnUnexpectedArg)
+            : this(null, DefaultHelpTextGenerator.Singleton, new DefaultCommandLineContext(console, workingDirectory), throwOnUnexpectedArg)
+        { }
+
+        /// <summary>
+        /// <para>
+        /// This constructor is obsolete and will be removed in a future version.
+        /// The recommended replacement is <see cref="CommandLineApplication(IHelpTextGenerator, IConsole, string)" />
+        /// </para>
+        /// <para>
+        /// Initializes a new instance of <see cref="CommandLineApplication"/>.
+        /// </para>
+        /// </summary>
+        /// <param name="helpTextGenerator">The help text generator to use.</param>
+        /// <param name="console">The console implementation to use.</param>
+        /// <param name="workingDirectory">The current working directory.</param>
+        /// <param name="throwOnUnexpectedArg">Initial value for <see cref="ThrowOnUnexpectedArgument"/>.</param>
+        [Obsolete("This constructor is obsolete and will be removed in a future version. " +
+            "The recommended replacement is CommandLineApplication(IHelpTextGenerator, IConsole, string) and ParserConfig.UnrecognizedArgumentHandling")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public CommandLineApplication(IHelpTextGenerator helpTextGenerator, IConsole console, string workingDirectory, bool throwOnUnexpectedArg)
             : this(null, helpTextGenerator, new DefaultCommandLineContext(console, workingDirectory), throwOnUnexpectedArg)
         {
@@ -93,9 +148,12 @@ namespace McMaster.Extensions.CommandLineUtils
             CommandLineContext context,
             bool throwOnUnexpectedArg)
         {
-            _context = context ?? throw new ArgumentNullException(nameof(context));
             Parent = parent;
+            _context = context ?? throw new ArgumentNullException(nameof(context));
+            _parserConfig = parent?.ParserConfig ?? new ParserConfig();
+#pragma warning disable 0618
             ThrowOnUnexpectedArgument = throwOnUnexpectedArg;
+#pragma warning restore 0618
             Options = new List<CommandOption>();
             Arguments = new List<CommandArgument>();
             Commands = new List<CommandLineApplication>();
@@ -108,7 +166,6 @@ namespace McMaster.Extensions.CommandLineUtils
             SetContext(context);
             _services = new Lazy<IServiceProvider>(() => new ServiceProvider(this));
             ValueParsers = parent?.ValueParsers ?? new ValueParserProvider();
-            _parserConfig = parent?.ParserConfig ?? new ParserConfig();
             UsePagerForHelpText = parent?.UsePagerForHelpText ?? true;
 
             _conventionContext = CreateConventionContext();
@@ -244,11 +301,26 @@ namespace McMaster.Extensions.CommandLineUtils
         public List<string> RemainingArguments { get; private set; }
 
         /// <summary>
+        /// <para>
+        /// This property is obsolete and will be removed in a future version.
+        /// The recommended replacement is <seealso cref="ParserConfig.UnrecognizedArgumentHandling"/>.
+        /// </para>
+        /// <para>
         /// Indicates whether the parser should throw an exception when it runs into an unexpected argument.
         /// If this field is set to false, the parser will stop parsing when it sees an unexpected argument, and all
         /// remaining arguments, including the first unexpected argument, will be stored in RemainingArguments property.
+        /// </para>
         /// </summary>
-        public bool ThrowOnUnexpectedArgument { get; set; }
+        [Obsolete("This property is obsolete and will be removed in a future version. " +
+            "The recommended replacement is ParserConfig.UnrecognizedArgumentHandling.")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public bool ThrowOnUnexpectedArgument
+        {
+            get => ParserConfig.UnrecognizedArgumentHandling == UnrecognizedArgumentHandling.Throw;
+            set => ParserConfig.UnrecognizedArgumentHandling = value
+                ? UnrecognizedArgumentHandling.Throw
+                : UnrecognizedArgumentHandling.StopAndCollectRemainingArguments;
+        }
 
         /// <summary>
         /// True when <see cref="OptionHelp"/> or <see cref="OptionVersion"/> was matched.

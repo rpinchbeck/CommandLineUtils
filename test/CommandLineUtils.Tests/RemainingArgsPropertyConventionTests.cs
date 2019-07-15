@@ -17,7 +17,7 @@ namespace McMaster.Extensions.CommandLineUtils.Tests
         protected CommandLineApplication<T> Create<T>() where T : class
         {
             var app = Create<T, RemainingArgsPropertyConvention>();
-            app.ThrowOnUnexpectedArgument = false;
+            app.ParserConfig.UnrecognizedArgumentHandling = UnrecognizedArgumentHandling.StopAndCollectRemainingArguments;
             return app;
         }
 
@@ -71,7 +71,13 @@ namespace McMaster.Extensions.CommandLineUtils.Tests
         [Fact]
         public void ItSetsRemainingArguments_List()
         {
-            var app = new CommandLineApplication<RemainingArgs_List>(false);
+            var app = new CommandLineApplication<RemainingArgs_List>
+            {
+                ParserConfig =
+                {
+                    UnrecognizedArgumentHandling = UnrecognizedArgumentHandling.StopAndCollectRemainingArguments,
+                }
+            };
             app.Conventions.UseDefaultConventions();
             app.Parse("a", "b");
             Assert.Equal(new[] { "a", "b" }, app.Model.RemainingArguments);

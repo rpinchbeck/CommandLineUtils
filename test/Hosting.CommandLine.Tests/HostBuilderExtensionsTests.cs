@@ -49,8 +49,7 @@ namespace McMaster.Extensions.Hosting.CommandLine.Tests
         {
             var valueHolder = new ValueHolder<string[]>();
             var convention = new Mock<IConvention>();
-            convention.Setup(c => c.Apply(It.IsAny<ConventionContext>()))
-                .Callback((ConventionContext c) => c.Application.ThrowOnUnexpectedArgument = false).Verifiable();
+            convention.Setup(c => c.Apply(It.IsAny<ConventionContext>())).Verifiable();
             var args = new[] { "Capture", "some", "test", "arguments" };
             await new HostBuilder()
                 .ConfigureServices(collection => collection
@@ -115,7 +114,8 @@ namespace McMaster.Extensions.Hosting.CommandLine.Tests
         {
             public ValueHolder<string[]> ValueHolder { get; set; }
 
-            public string[]? RemainingArguments
+            [Argument(0)]
+            public string[]? AllArgs
             {
                 get => ValueHolder.Value;
                 set => ValueHolder.Value = value;

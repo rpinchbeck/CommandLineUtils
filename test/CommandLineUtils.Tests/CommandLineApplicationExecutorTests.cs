@@ -232,9 +232,11 @@ namespace McMaster.Extensions.CommandLineUtils.Tests
             Assert.Equal(200, await CommandLineApplication.ExecuteAsync<TaskReturnType>());
         }
 
-        [Command(ThrowOnUnexpectedArgument = false)]
         private class ContextApp
         {
+            [Argument(0)]
+            public string[]? Args { get; set; }
+
             public int OnExecute(CommandLineContext context)
                 => context.Arguments.Length;
         }
