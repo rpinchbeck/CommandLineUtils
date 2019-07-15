@@ -10,6 +10,11 @@ namespace McMaster.Extensions.CommandLineUtils
     /// </summary>
     public class ParserConfig
     {
+        /// <summary>
+        /// Determines if '--' can be used to stop the parser from processing any more arguments.
+        /// </summary>
+        public bool AllowArgumentSeparator { get; set; }
+
         private bool? _clusterOptions;
 
         /// <summary>

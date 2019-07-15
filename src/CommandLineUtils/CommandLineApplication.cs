@@ -348,9 +348,22 @@ namespace McMaster.Extensions.CommandLineUtils
         public List<CommandLineApplication> Commands { get; private set; }
 
         /// <summary>
+        /// <para>
+        /// This property has been marked as obsolete and will be removed in a future version.
+        /// The recommended replacement is <see cref="ParserConfig.AllowArgumentSeparator" />.
+        /// </para>
+        /// <para>
         /// Determines if '--' can be used to separate known arguments and options from additional content passed to <see cref="RemainingArguments"/>.
+        /// </para>
         /// </summary>
-        public bool AllowArgumentSeparator { get; set; }
+        [Obsolete("This property has been marked as obsolete and will be removed in a future version." +
+            "The recommended replacement is ParserConfig.AllowArgumentSeparator")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public bool AllowArgumentSeparator
+        {
+            get => ParserConfig.AllowArgumentSeparator;
+            set => ParserConfig.AllowArgumentSeparator = value;
+        }
 
         /// <summary>
         /// <para>

@@ -101,8 +101,17 @@ namespace McMaster.Extensions.CommandLineUtils
         public bool ThrowOnUnexpectedArgument { get; set; } = true;
 
         /// <summary>
+        /// <para>
+        /// This property has been marked as obsolete and will be removed in a future version.
+        /// The recommended replacement is <see cref="ParserConfig.AllowArgumentSeparator" />.
+        /// </para>
+        /// <para>
         /// Allow '--' to be used to stop parsing arguments. <seealso cref="CommandLineApplication.AllowArgumentSeparator"/>
+        /// </para>
         /// </summary>
+        [Obsolete("This property has been marked as obsolete and will be removed in a future version." +
+            "The recommended replacement is ParserConfig.AllowArgumentSeparator")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public bool AllowArgumentSeparator { get; set; }
 
         /// <summary>
@@ -181,12 +190,12 @@ namespace McMaster.Extensions.CommandLineUtils
                 app.AddName(name);
             }
 
-            app.AllowArgumentSeparator = AllowArgumentSeparator;
             app.Description = Description;
             app.ExtendedHelpText = ExtendedHelpText;
             app.FullName = FullName;
             app.ShowInHelpText = ShowInHelpText;
 #pragma warning disable 0618
+            app.AllowArgumentSeparator = AllowArgumentSeparator;
             app.ThrowOnUnexpectedArgument = ThrowOnUnexpectedArgument;
             app.ResponseFileHandling = ResponseFileHandling;
             app.ParserConfig.OptionsComparison = OptionsComparison;

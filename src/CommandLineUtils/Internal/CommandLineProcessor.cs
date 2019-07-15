@@ -349,7 +349,7 @@ namespace McMaster.Extensions.CommandLineUtils
 
         private bool ProcessArgumentSeparator()
         {
-            if (!_currentCommand.AllowArgumentSeparator)
+            if (!_config.AllowArgumentSeparator)
             {
                 HandleUnexpectedArg("option");
             }

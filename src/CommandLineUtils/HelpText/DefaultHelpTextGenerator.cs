@@ -130,7 +130,7 @@ namespace McMaster.Extensions.CommandLineUtils.HelpText
                 output.Write(" [command]");
             }
 
-            if (application.AllowArgumentSeparator)
+            if (application.ParserConfig.AllowArgumentSeparator)
             {
                 output.Write(" [[--] <arg>...]");
             }

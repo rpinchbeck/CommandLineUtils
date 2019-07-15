@@ -234,10 +234,10 @@ namespace McMaster.Extensions.CommandLineUtils.Tests
             {
                 ParserConfig =
                 {
+                    AllowArgumentSeparator = true,
                     ResponseFileHandling = ResponseFileHandling.ParseArgsAsSpaceSeparated,
                     UnrecognizedArgumentHandling = UnrecognizedArgumentHandling.StopAndCollectRemainingArguments,
                 },
-                AllowArgumentSeparator = true,
             };
             app.Execute("--", "@somepath.txt");
 
@@ -252,10 +252,10 @@ namespace McMaster.Extensions.CommandLineUtils.Tests
             {
                 ParserConfig =
                 {
+                    AllowArgumentSeparator = true,
                     ResponseFileHandling = ResponseFileHandling.ParseArgsAsSpaceSeparated,
                     UnrecognizedArgumentHandling = UnrecognizedArgumentHandling.StopAndCollectRemainingArguments,
                 },
-                AllowArgumentSeparator = true,
             };
             var rspFile = CreateResponseFile("-- --hello");
             app.Execute("@" + rspFile, "--world");

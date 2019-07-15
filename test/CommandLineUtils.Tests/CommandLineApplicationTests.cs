@@ -590,9 +590,9 @@ namespace McMaster.Extensions.CommandLineUtils.Tests
         {
             var app = new CommandLineApplication
             {
-                AllowArgumentSeparator = true,
                 ParserConfig =
                 {
+                    AllowArgumentSeparator = true,
                     UnrecognizedArgumentHandling = UnrecognizedArgumentHandling.StopAndCollectRemainingArguments,
                 }
             };
@@ -687,9 +687,9 @@ namespace McMaster.Extensions.CommandLineUtils.Tests
             var app = new CommandLineApplication
             {
                 Name = "proxy-command",
-                AllowArgumentSeparator = true,
                 ParserConfig =
                 {
+                    AllowArgumentSeparator = true,
                     UnrecognizedArgumentHandling = UnrecognizedArgumentHandling.StopAndCollectRemainingArguments,
                 }
             };
