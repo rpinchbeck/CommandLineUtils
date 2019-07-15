@@ -35,7 +35,7 @@ namespace McMaster.Extensions.CommandLineUtils.Tests
             var rsp = CreateResponseFile(responseFileLines);
             var app = new CommandLineApplication
             {
-                ResponseFileHandling = options
+                ParserConfig = { ResponseFileHandling = options }
             };
             var args = app.Argument("Words", "more words", multipleValues: true);
             Assert.Equal(0, app.Execute("@" + rsp));
@@ -97,7 +97,7 @@ namespace McMaster.Extensions.CommandLineUtils.Tests
         {
             var app = new CommandLineApplication
             {
-                ResponseFileHandling = ResponseFileHandling.ParseArgsAsLineSeparated,
+                ParserConfig = { ResponseFileHandling = ResponseFileHandling.ParseArgsAsLineSeparated },
             };
             app.Argument("Input", "Input", multipleValues: true);
 
@@ -127,7 +127,7 @@ namespace McMaster.Extensions.CommandLineUtils.Tests
                 " ipsum ");
             var app = new CommandLineApplication
             {
-                ResponseFileHandling = ResponseFileHandling.ParseArgsAsSpaceSeparated,
+                ParserConfig = { ResponseFileHandling = ResponseFileHandling.ParseArgsAsSpaceSeparated },
             };
             var args = app.Argument("Words", "more words", multipleValues: true);
 
@@ -233,7 +233,7 @@ namespace McMaster.Extensions.CommandLineUtils.Tests
             var app = new CommandLineApplication
             {
                 ThrowOnUnexpectedArgument = false,
-                ResponseFileHandling = ResponseFileHandling.ParseArgsAsSpaceSeparated,
+                ParserConfig = { ResponseFileHandling = ResponseFileHandling.ParseArgsAsSpaceSeparated },
                 AllowArgumentSeparator = true,
             };
             app.Execute("--", "@somepath.txt");
@@ -248,7 +248,7 @@ namespace McMaster.Extensions.CommandLineUtils.Tests
             var app = new CommandLineApplication
             {
                 ThrowOnUnexpectedArgument = false,
-                ResponseFileHandling = ResponseFileHandling.ParseArgsAsSpaceSeparated,
+                ParserConfig = { ResponseFileHandling = ResponseFileHandling.ParseArgsAsSpaceSeparated },
                 AllowArgumentSeparator = true,
             };
             var rspFile = CreateResponseFile("-- --hello");
@@ -264,7 +264,7 @@ namespace McMaster.Extensions.CommandLineUtils.Tests
             CommandArgument? wordArgs = null;
             app.Command("save", c =>
             {
-                c.ResponseFileHandling = ResponseFileHandling.ParseArgsAsSpaceSeparated;
+                c.ParserConfig.ResponseFileHandling = ResponseFileHandling.ParseArgsAsSpaceSeparated;
                 wordArgs = c.Argument("words", "more words", multipleValues: true);
             });
             var rspFile = CreateResponseFile(" 'lorem ipsum' ", "dolor sit amet");
@@ -281,7 +281,7 @@ namespace McMaster.Extensions.CommandLineUtils.Tests
         {
             var app = new CommandLineApplication(throwOnUnexpectedArg: false)
             {
-                ResponseFileHandling = ResponseFileHandling.ParseArgsAsSpaceSeparated,
+                ParserConfig = { ResponseFileHandling = ResponseFileHandling.ParseArgsAsSpaceSeparated }
             };
             var opt = app.Option("--message <MESSAGE>", "Message", CommandOptionType.SingleValue);
             var rspFile = CreateResponseFile(" 'lorem ipsum' ", "dolor sit amet");

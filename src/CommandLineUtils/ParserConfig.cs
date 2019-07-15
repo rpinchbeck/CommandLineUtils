@@ -10,7 +10,6 @@ namespace McMaster.Extensions.CommandLineUtils
     /// </summary>
     public class ParserConfig
     {
-        private char[] _optionNameValueSeparators = { ' ', ':', '=' };
         private bool? _clusterOptions;
 
         /// <summary>
@@ -46,10 +45,14 @@ namespace McMaster.Extensions.CommandLineUtils
             set => _clusterOptions = value;
         }
 
+        internal bool ClusterOptionsWasSetExplicitly => _clusterOptions.HasValue;
+
         /// <summary>
         /// The way arguments and options are matched.
         /// </summary>
         public StringComparison OptionsComparison { get; set; } = StringComparison.Ordinal;
+
+        private char[] _optionNameValueSeparators = { ' ', ':', '=' };
 
         /// <summary>
         /// Characters used to separate the option name from the value.
@@ -78,7 +81,6 @@ namespace McMaster.Extensions.CommandLineUtils
         }
 
         internal bool OptionNameAndValueCanBeSpaceSeparated => Array.IndexOf(OptionNameValueSeparators, ' ') >= 0;
-        internal bool ClusterOptionsWasSetExplicitly => _clusterOptions.HasValue;
 
         /// <summary>
         /// When an invalid argument is given, make suggestions in the error message
@@ -93,5 +95,19 @@ namespace McMaster.Extensions.CommandLineUtils
         /// </para>
         /// </summary>
         public bool MakeSuggestionsInErrorMessage { get; set; } = true;
+
+        /// <summary>
+        /// <para>
+        /// When enabled, the parser will treat any arguments beginning with '@' as a file path to a response file.
+        /// A response file contains additional arguments that will be treated as if they were passed in on the command line.
+        /// </para>
+        /// <para>
+        /// Defaults to <see cref="ResponseFileHandling.Disabled" />.
+        /// </para>
+        /// <para>
+        /// Nested response false are not supported.
+        /// </para>
+        /// </summary>
+        public ResponseFileHandling ResponseFileHandling { get; set; }
     }
 }

@@ -97,8 +97,16 @@ namespace McMaster.Extensions.CommandLineUtils
         public bool AllowArgumentSeparator { get; set; }
 
         /// <summary>
+        /// <para>
+        /// This property has been marked as obsolete and will be removed in a future version.
+        /// The recommended replacement is <see cref="ParserConfig.ResponseFileHandling" />.
+        /// </para>
+        /// <para>
         /// Treat arguments beginning as '@' as a response file. <seealso cref="CommandLineApplication.ResponseFileHandling"/>
+        /// </para>
         /// </summary>
+        [Obsolete("This property has been marked as obsolete and will be removed in a future version.")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public ResponseFileHandling ResponseFileHandling { get; set; } = ResponseFileHandling.Disabled;
 
         /// <summary>
@@ -168,10 +176,10 @@ namespace McMaster.Extensions.CommandLineUtils
             app.Description = Description;
             app.ExtendedHelpText = ExtendedHelpText;
             app.FullName = FullName;
-            app.ResponseFileHandling = ResponseFileHandling;
             app.ShowInHelpText = ShowInHelpText;
             app.ThrowOnUnexpectedArgument = ThrowOnUnexpectedArgument;
             #pragma warning disable 0618
+            app.ResponseFileHandling = ResponseFileHandling;
             app.ParserConfig.OptionsComparison = OptionsComparison;
             #pragma warning restore 0618
             app.ValueParsers.ParseCulture = ParseCulture;

@@ -282,6 +282,10 @@ namespace McMaster.Extensions.CommandLineUtils
 
         /// <summary>
         /// <para>
+        /// This property has been marked as obsolete and will be removed in a future version.
+        /// The recommended replacement is <see cref="ParserConfig.ResponseFileHandling" />.
+        /// </para>
+        /// <para>
         /// When enabled, the parser will treat any arguments beginning with '@' as a file path to a response file.
         /// A response file contains additional arguments that will be treated as if they were passed in on the command line.
         /// </para>
@@ -292,7 +296,14 @@ namespace McMaster.Extensions.CommandLineUtils
         /// Nested response false are not supported.
         /// </para>
         /// </summary>
-        public ResponseFileHandling ResponseFileHandling { get; set; }
+        [Obsolete("This property has been marked as obsolete and will be removed in a future version." +
+            "The recommended replacement is ParserConfig.ResponseFileHandling")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public ResponseFileHandling ResponseFileHandling
+        {
+            get => ParserConfig.ResponseFileHandling;
+            set => ParserConfig.ResponseFileHandling = value;
+        }
 
         /// <summary>
         /// <para>

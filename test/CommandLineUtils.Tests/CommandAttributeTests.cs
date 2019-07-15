@@ -7,7 +7,7 @@ namespace McMaster.Extensions.CommandLineUtils.Tests
 {
     public class CommandAttributeTests
     {
-        [Command(ResponseFileHandling = ResponseFileHandling.ParseArgsAsLineSeparated, AllowArgumentSeparator = true, ThrowOnUnexpectedArgument = false)]
+        [Command(AllowArgumentSeparator = true, ThrowOnUnexpectedArgument = false)]
         private class ParsingOptions
         { }
 
@@ -17,7 +17,6 @@ namespace McMaster.Extensions.CommandLineUtils.Tests
             var app = new CommandLineApplication<ParsingOptions>();
             app.Conventions.UseCommandAttribute();
 
-            Assert.Equal(ResponseFileHandling.ParseArgsAsLineSeparated, app.ResponseFileHandling);
             Assert.True(app.AllowArgumentSeparator);
             Assert.False(app.ThrowOnUnexpectedArgument);
         }

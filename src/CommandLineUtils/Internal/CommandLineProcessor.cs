@@ -484,7 +484,7 @@ namespace McMaster.Extensions.CommandLineUtils
 
                 if (_rawArgEnumerator.MoveNext())
                 {
-                    if (CurrentCommand.ResponseFileHandling != ResponseFileHandling.Disabled
+                    if (_config.ResponseFileHandling != ResponseFileHandling.Disabled
                         && !DisableResponseFileLoading)
                     {
                         var raw = _rawArgEnumerator.Current;
@@ -530,7 +530,7 @@ namespace McMaster.Extensions.CommandLineUtils
 
                 try
                 {
-                    var rspParams = ResponseFileParser.Parse(fullPath, CurrentCommand.ResponseFileHandling);
+                    var rspParams = ResponseFileParser.Parse(fullPath, _config.ResponseFileHandling);
                     return rspParams.GetEnumerator();
                 }
                 catch (Exception ex)
