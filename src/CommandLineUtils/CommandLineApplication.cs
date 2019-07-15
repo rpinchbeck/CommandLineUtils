@@ -32,6 +32,7 @@ namespace McMaster.Extensions.CommandLineUtils
         private readonly HashSet<string> _names = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         private string? _primaryCommandName;
         internal CommandLineContext _context;
+        private ParserConfig _parserConfig;
         private IHelpTextGenerator _helpTextGenerator;
         private CommandOption? _optionHelp;
         private readonly Lazy<IServiceProvider> _services;
@@ -107,6 +108,7 @@ namespace McMaster.Extensions.CommandLineUtils
             SetContext(context);
             _services = new Lazy<IServiceProvider>(() => new ServiceProvider(this));
             ValueParsers = parent?.ValueParsers ?? new ValueParserProvider();
+            _parserConfig = parent?.ParserConfig ?? new ParserConfig();
             _clusterOptions = parent?._clusterOptions;
             UsePagerForHelpText = parent?.UsePagerForHelpText ?? true;
 
@@ -133,6 +135,15 @@ namespace McMaster.Extensions.CommandLineUtils
         {
             get => _helpTextGenerator;
             set => _helpTextGenerator = value ?? throw new ArgumentNullException(nameof(value));
+        }
+
+        /// <summary>
+        /// Configures the parser.
+        /// </summary>
+        public ParserConfig ParserConfig
+        {
+            get => _parserConfig;
+            set => _parserConfig = value ?? throw new ArgumentNullException(nameof(value));
         }
 
         /// <summary>
@@ -670,7 +681,7 @@ namespace McMaster.Extensions.CommandLineUtils
         {
             args ??= Util.EmptyArray<string>();
 
-            var processor = new CommandLineProcessor(this, args);
+            var processor = new CommandLineProcessor(this, ParserConfig, args);
             var result = processor.Process();
             result.SelectedCommand.HandleParseResult(result);
             return result;
