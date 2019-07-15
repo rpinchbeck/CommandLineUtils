@@ -75,5 +75,18 @@ namespace McMaster.Extensions.CommandLineUtils
         internal bool OptionNameAndValueCanBeSpaceSeparated => Array.IndexOf(OptionNameValueSeparators, ' ') >= 0;
         internal bool ClusterOptionsWasSetExplicitly => _clusterOptions.HasValue;
 
+        /// <summary>
+        /// When an invalid argument is given, make suggestions in the error message
+        /// about similar, valid commands or options.
+        /// <para>
+        /// $ git pshu
+        /// Specify --help for a list of available options and commands
+        /// Unrecognized command or argument 'pshu'
+        ///
+        /// Did you mean this?
+        ///     push
+        /// </para>
+        /// </summary>
+        public bool MakeSuggestionsInErrorMessage { get; set; } = true;
     }
 }

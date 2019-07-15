@@ -688,8 +688,14 @@ namespace McMaster.Extensions.CommandLineUtils
         }
 
         /// <summary>
+        /// <para>
+        /// This property has been marked as obsolete and will be removed in a future version.
+        /// The recommended replacement is <see cref="ParserConfig.MakeSuggestionsInErrorMessage" />.
+        /// </para>
+        /// <para>
         /// When an invalid argument is given, make suggestions in the error message
         /// about similar, valid commands or options.
+        /// </para>
         /// <para>
         /// $ git pshu
         /// Specify --help for a list of available options and commands
@@ -699,7 +705,14 @@ namespace McMaster.Extensions.CommandLineUtils
         ///     push
         /// </para>
         /// </summary>
-        public bool MakeSuggestionsInErrorMessage { get; set; } = true;
+        [Obsolete("This property has been marked as obsolete and will be removed in a future version." +
+            "The recommended replacement is ParserConfig.MakeSuggestionsInErrorMessage")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public bool MakeSuggestionsInErrorMessage
+        {
+            get => ParserConfig.MakeSuggestionsInErrorMessage;
+            set => ParserConfig.MakeSuggestionsInErrorMessage = value;
+        }
 
         /// <summary>
         /// Handle the result of parsing command line arguments.

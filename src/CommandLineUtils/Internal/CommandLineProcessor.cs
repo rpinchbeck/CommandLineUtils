@@ -1,4 +1,4 @@
-// Copyright (c) Nate McMaster.
+﻿// Copyright (c) Nate McMaster.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
@@ -373,7 +373,7 @@ namespace McMaster.Extensions.CommandLineUtils
 
                 var suggestions = Enumerable.Empty<string>();
 
-                if (_currentCommand.MakeSuggestionsInErrorMessage && !string.IsNullOrEmpty(value))
+                if (_config.MakeSuggestionsInErrorMessage && !string.IsNullOrEmpty(value))
                 {
                     suggestions = SuggestionCreator.GetTopSuggestions(_currentCommand, value);
                 }

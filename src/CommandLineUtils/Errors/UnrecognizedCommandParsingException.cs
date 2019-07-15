@@ -31,7 +31,7 @@ namespace McMaster.Extensions.CommandLineUtils
         /// argument that caused this <see cref="UnrecognizedCommandParsingException"/>.
         /// </summary>
         /// <remarks>
-        /// This property always be empty <see cref="CommandLineApplication.MakeSuggestionsInErrorMessage"/> is false.
+        /// This property always be empty <see cref="ParserConfig.MakeSuggestionsInErrorMessage"/> is false.
         /// </remarks>
         /// <value>This property get/set the suggestions for an invalid argument.</value>
         public IEnumerable<string> NearestMatches { get; }
