@@ -109,7 +109,6 @@ namespace McMaster.Extensions.CommandLineUtils
             _services = new Lazy<IServiceProvider>(() => new ServiceProvider(this));
             ValueParsers = parent?.ValueParsers ?? new ValueParserProvider();
             _parserConfig = parent?.ParserConfig ?? new ParserConfig();
-            _clusterOptions = parent?._clusterOptions;
             UsePagerForHelpText = parent?.UsePagerForHelpText ?? true;
 
             _conventionContext = CreateConventionContext();
@@ -302,6 +301,10 @@ namespace McMaster.Extensions.CommandLineUtils
 
         /// <summary>
         /// <para>
+        /// This property has been marked as obsolete and will be removed in a future version.
+        /// The recommended replacement is <see cref="ParserConfig.ClusterOptions" />.
+        /// </para>
+        /// <para>
         /// One or more options of <see cref="CommandOptionType.NoValue"/>, followed by at most one option that takes values, should be accepted when grouped behind one '-' delimiter.
         /// </para>
         /// <para>
@@ -326,17 +329,14 @@ namespace McMaster.Extensions.CommandLineUtils
         /// <remarks>
         /// <seealso href="https://www.gnu.org/software/libc/manual/html_node/Argument-Syntax.html"/>
         /// </remarks>
+        [Obsolete("This property has been marked as obsolete and will be removed in a future version." +
+            "The recommended replacement is ParserConfig.ClusterOptions")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public bool ClusterOptions
         {
-            // unless explicitly set, use the value of cluster options from the parent command
-            // or default to true if this is the root command
-            get => _clusterOptions ?? Parent == null || Parent.ClusterOptions;
-            set => _clusterOptions = value;
+            get => ParserConfig.ClusterOptions;
+            set => ParserConfig.ClusterOptions = value;
         }
-
-        private bool? _clusterOptions;
-
-        internal bool ClusterOptionsWasSetExplicitly => _clusterOptions.HasValue;
 
         /// <summary>
         /// Gets the default value parser provider.

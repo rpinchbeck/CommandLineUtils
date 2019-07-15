@@ -1,4 +1,4 @@
-﻿// Copyright (c) Nate McMaster.
+// Copyright (c) Nate McMaster.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
@@ -37,30 +37,29 @@ namespace McMaster.Extensions.CommandLineUtils
             _initialCommand = command;
             _config = config ?? throw new ArgumentNullException(nameof(config));
             _enumerator = new ArgumentEnumerator(command, _config, arguments ?? new string[0]);
-            CheckForShortOptionClustering(command);
         }
 
-        private static void CheckForShortOptionClustering(CommandLineApplication command)
+        private void CheckForShortOptionClustering(CommandLineApplication command)
         {
-            if (!command.ClusterOptionsWasSetExplicitly)
+            if (!_config.ClusterOptionsWasSetExplicitly)
             {
                 foreach (var option in AllOptions(command))
                 {
                     if (option.ShortName != null && option.ShortName.Length != 1)
                     {
-                        command.ClusterOptions = false;
+                        _config.ClusterOptions = false;
                         break;
                     }
                 }
             }
-            else if (command.ClusterOptions)
+            else if (_config.ClusterOptions)
             {
                 foreach (var option in AllOptions(command))
                 {
                     if (option.ShortName != null && option.ShortName.Length != 1)
                     {
                         throw new CommandParsingException(command,
-                            $"The ShortName on CommandOption is too long: '{option.ShortName}'. Short names cannot be more than one character long when {nameof(CommandLineApplication.ClusterOptions)} is enabled.");
+                            $"The ShortName on CommandOption is too long: '{option.ShortName}'. Short names cannot be more than one character long when {nameof(ParserConfig.ClusterOptions)} is enabled.");
                     }
                 }
             }
@@ -84,6 +83,8 @@ namespace McMaster.Extensions.CommandLineUtils
 
         public ParseResult Process()
         {
+            CheckForShortOptionClustering(_initialCommand);
+
             _currentCommand = _initialCommand;
             _currentCommandArguments = null;
             while (_enumerator.MoveNext())
@@ -171,7 +172,7 @@ namespace McMaster.Extensions.CommandLineUtils
             var name = arg.Name;
             if (arg.IsShortOption)
             {
-                if (_currentCommand.ClusterOptions)
+                if (_config.ClusterOptions)
                 {
                     for (var i = 0; i < arg.Name.Length; i++)
                     {
@@ -547,6 +548,7 @@ namespace McMaster.Extensions.CommandLineUtils
 
             public void Dispose()
             {
+                _rspEnumerator?.Dispose();
                 Current = null;
                 _rspEnumerator = null;
                 _rawArgEnumerator.Dispose();

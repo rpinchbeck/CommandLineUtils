@@ -38,7 +38,10 @@ namespace McMaster.Extensions.CommandLineUtils.Tests
         {
             var app = new CommandLineApplication
             {
-                ClusterOptions = true
+                ParserConfig =
+                {
+                    ClusterOptions = true
+                }
             };
 
             var optA = app.Option("-a", "Option A", CommandOptionType.NoValue);
@@ -57,7 +60,10 @@ namespace McMaster.Extensions.CommandLineUtils.Tests
         {
             var app = new CommandLineApplication
             {
-                ClusterOptions = true
+                ParserConfig =
+                {
+                    ClusterOptions = true
+                }
             };
 
             var optA = app.Option("-a|--all", "Option A", CommandOptionType.NoValue);
@@ -75,7 +81,10 @@ namespace McMaster.Extensions.CommandLineUtils.Tests
         {
             var app = new CommandLineApplication
             {
-                ClusterOptions = true
+                ParserConfig =
+                {
+                    ClusterOptions = true
+                }
             };
             var verbose = app.Option("-v|--verbose", "Verbose output", CommandOptionType.NoValue);
             var log = app.Option("-l|--log[:<LEVEL>]", "Log level", CommandOptionType.SingleOrNoValue);
@@ -98,7 +107,10 @@ namespace McMaster.Extensions.CommandLineUtils.Tests
         {
             var app = new CommandLineApplication
             {
-                ClusterOptions = true
+                ParserConfig =
+                {
+                    ClusterOptions = true
+                }
             };
 
             app.Option("-v|--verbose", "Verbose output", CommandOptionType.NoValue);
@@ -112,7 +124,10 @@ namespace McMaster.Extensions.CommandLineUtils.Tests
         {
             var app = new CommandLineApplication
             {
-                ClusterOptions = true
+                ParserConfig =
+                {
+                    ClusterOptions = true
+                }
             };
 
             app.Option("-au|--auth", "Verbose output", CommandOptionType.NoValue);
@@ -146,7 +161,7 @@ namespace McMaster.Extensions.CommandLineUtils.Tests
             var app = new CommandLineApplication();
             app.Option("-au|--auth", "Verbose output", CommandOptionType.NoValue);
             app.Parse();
-            Assert.False(app.ClusterOptions);
+            Assert.False(app.ParserConfig.ClusterOptions);
         }
 
         [Fact]
@@ -154,9 +169,9 @@ namespace McMaster.Extensions.CommandLineUtils.Tests
         {
             var app = new CommandLineApplication();
             app.Command("sub", c => c.Option("-au|--auth", "Verbose output", CommandOptionType.NoValue));
-            Assert.False(app.ClusterOptionsWasSetExplicitly);
+            Assert.False(app.ParserConfig.ClusterOptionsWasSetExplicitly);
             app.Parse("sub", "-au");
-            Assert.False(app.ClusterOptions);
+            Assert.False(app.ParserConfig.ClusterOptions);
         }
 
         [Fact]
@@ -164,9 +179,9 @@ namespace McMaster.Extensions.CommandLineUtils.Tests
         {
             var app = new CommandLineApplication<ShortNameType>();
             app.Conventions.UseDefaultConventions();
-            Assert.False(app.ClusterOptionsWasSetExplicitly);
+            Assert.False(app.ParserConfig.ClusterOptionsWasSetExplicitly);
             app.Parse();
-            Assert.False(app.ClusterOptions);
+            Assert.False(app.ParserConfig.ClusterOptions);
         }
 
         [Fact]
@@ -174,9 +189,9 @@ namespace McMaster.Extensions.CommandLineUtils.Tests
         {
             var app = new CommandLineApplication<ParentCommand>();
             app.Conventions.UseDefaultConventions();
-            Assert.False(app.ClusterOptionsWasSetExplicitly);
+            Assert.False(app.ParserConfig.ClusterOptionsWasSetExplicitly);
             app.Parse();
-            Assert.False(app.ClusterOptions);
+            Assert.False(app.ParserConfig.ClusterOptions);
         }
 
         [Fact]
@@ -184,9 +199,9 @@ namespace McMaster.Extensions.CommandLineUtils.Tests
         {
             var app = new CommandLineApplication<ParentParentCommand>();
             app.Conventions.UseDefaultConventions();
-            Assert.False(app.ClusterOptionsWasSetExplicitly);
+            Assert.False(app.ParserConfig.ClusterOptionsWasSetExplicitly);
             app.Parse();
-            Assert.False(app.ClusterOptions);
+            Assert.False(app.ParserConfig.ClusterOptions);
         }
 
         [Fact]
@@ -195,7 +210,15 @@ namespace McMaster.Extensions.CommandLineUtils.Tests
             var app = new CommandLineApplication();
             app.Option("-a|--auth", "Verbose output", CommandOptionType.NoValue);
             app.Parse();
-            Assert.True(app.ClusterOptions);
+            Assert.True(app.ParserConfig.ClusterOptions);
+        }
+
+        [Fact]
+        public void ParserConfigIsInherited()
+        {
+            var app = new CommandLineApplication();
+            var cmd = app.Command("save", c => { });
+            Assert.Same(app.ParserConfig, cmd.ParserConfig);
         }
 
         [Fact]
@@ -203,10 +226,13 @@ namespace McMaster.Extensions.CommandLineUtils.Tests
         {
             var app = new CommandLineApplication
             {
-                ClusterOptions = false
+                ParserConfig =
+                {
+                    ClusterOptions = false
+                }
             };
             var cmd = app.Command("save", c => { });
-            Assert.Equal(app.ClusterOptions, cmd.ClusterOptions);
+            Assert.Equal(app.ParserConfig.ClusterOptions, cmd.ParserConfig.ClusterOptions);
         }
 
         [Theory]
@@ -220,7 +246,10 @@ namespace McMaster.Extensions.CommandLineUtils.Tests
         {
             var app = new CommandLineApplication
             {
-                ClusterOptions = true
+                ParserConfig =
+                {
+                    ClusterOptions = true
+                }
             };
             app.Option("-v|--verbose", "Verbose output", CommandOptionType.NoValue);
             app.Option("-l|--log:<LEVEL>", "Log level", CommandOptionType.SingleValue);

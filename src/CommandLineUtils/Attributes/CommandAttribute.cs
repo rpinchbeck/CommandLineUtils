@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 
@@ -136,6 +137,8 @@ namespace McMaster.Extensions.CommandLineUtils
         /// <remarks>
         /// <seealso href="https://www.gnu.org/software/libc/manual/html_node/Argument-Syntax.html"/>
         /// </remarks>
+        [Obsolete("This property has been marked as obsolete and will be removed in a future version.")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public bool ClusterOptions
         {
             get => _clusterOptions ?? true;
@@ -166,7 +169,7 @@ namespace McMaster.Extensions.CommandLineUtils
 
             if (_clusterOptions.HasValue)
             {
-                app.ClusterOptions = _clusterOptions.Value;
+                app.ParserConfig.ClusterOptions = _clusterOptions.Value;
             }
         }
     }
