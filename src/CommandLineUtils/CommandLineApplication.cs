@@ -295,9 +295,20 @@ namespace McMaster.Extensions.CommandLineUtils
         public ResponseFileHandling ResponseFileHandling { get; set; }
 
         /// <summary>
+        /// <para>
+        /// This property has been marked as obsolete and will be removed in a future version.
+        /// The recommended replacement is <see cref="ParserConfig.OptionsComparison" />.
+        /// </para>
         /// The way arguments and options are matched.
         /// </summary>
-        public StringComparison OptionsComparison { get; set; }
+        [Obsolete("This property has been marked as obsolete and will be removed in a future version." +
+            "The recommended replacement is ParserConfig.OptionsComparison")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public StringComparison OptionsComparison
+        {
+            get => ParserConfig.OptionsComparison;
+            set => ParserConfig.OptionsComparison = value;
+        }
 
         /// <summary>
         /// <para>

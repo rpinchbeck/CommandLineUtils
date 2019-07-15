@@ -47,6 +47,11 @@ namespace McMaster.Extensions.CommandLineUtils
         }
 
         /// <summary>
+        /// The way arguments and options are matched.
+        /// </summary>
+        public StringComparison OptionsComparison { get; set; } = StringComparison.Ordinal;
+
+        /// <summary>
         /// Characters used to separate the option name from the value.
         /// <para>
         /// By default, allowed separators are ' ' (space), :, and =

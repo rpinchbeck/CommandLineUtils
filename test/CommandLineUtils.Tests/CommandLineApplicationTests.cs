@@ -958,7 +958,7 @@ Examples:
         public void OptionsCanBeCaseInsensitive()
         {
             var app = new CommandLineApplication();
-            app.OptionsComparison = StringComparison.OrdinalIgnoreCase;
+            app.ParserConfig.OptionsComparison = StringComparison.OrdinalIgnoreCase;
             var optBig = app.Option("-F|--file", "File", CommandOptionType.NoValue);
 
             app.Execute("-f");
@@ -969,7 +969,7 @@ Examples:
         public void LongOptionsCanBeCaseInsensitive()
         {
             var app = new CommandLineApplication();
-            app.OptionsComparison = StringComparison.OrdinalIgnoreCase;
+            app.ParserConfig.OptionsComparison = StringComparison.OrdinalIgnoreCase;
             var optBig = app.Option("-F|--file", "File", CommandOptionType.NoValue);
 
             app.Execute("--File");

@@ -102,8 +102,15 @@ namespace McMaster.Extensions.CommandLineUtils
         public ResponseFileHandling ResponseFileHandling { get; set; } = ResponseFileHandling.Disabled;
 
         /// <summary>
+        /// <para>
+        /// This property has been marked as obsolete and will be removed in a future version.
+        /// The recommended replacement is <see cref="ParserConfig.OptionsComparison" />.
+        /// </para>
         /// The way arguments and options are matched.
         /// </summary>
+        [Obsolete("This property has been marked as obsolete and will be removed in a future version." +
+            "The recommended replacement is ParserConfig.OptionsComparison")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public StringComparison OptionsComparison { get; set; } = StringComparison.Ordinal;
 
         /// <summary>
@@ -164,7 +171,9 @@ namespace McMaster.Extensions.CommandLineUtils
             app.ResponseFileHandling = ResponseFileHandling;
             app.ShowInHelpText = ShowInHelpText;
             app.ThrowOnUnexpectedArgument = ThrowOnUnexpectedArgument;
-            app.OptionsComparison = OptionsComparison;
+            #pragma warning disable 0618
+            app.ParserConfig.OptionsComparison = OptionsComparison;
+            #pragma warning restore 0618
             app.ValueParsers.ParseCulture = ParseCulture;
 
             if (_clusterOptions.HasValue)

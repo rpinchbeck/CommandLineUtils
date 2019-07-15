@@ -325,7 +325,7 @@ namespace McMaster.Extensions.CommandLineUtils
         {
             var options = _currentCommand
                 .GetOptions()
-                .Where(o => string.Equals(name, by(o), _currentCommand.OptionsComparison))
+                .Where(o => string.Equals(name, by(o), _config.OptionsComparison))
                 .ToList();
 
             if (options.Count == 0)
