@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
+using McMaster.Extensions.CommandLineUtils.Abstractions;
 
 namespace McMaster.Extensions.CommandLineUtils
 {
@@ -114,6 +115,19 @@ namespace McMaster.Extensions.CommandLineUtils
         /// </para>
         /// </summary>
         public ResponseFileHandling ResponseFileHandling { get; set; }
+
+        /// <summary>
+        /// Gets the default value parser provider.
+        /// <para>
+        /// The value parsers control how argument values are converted from strings to other types. Additional value
+        /// parsers can be added so that domain specific types can converted. In-built value parsers can also be replaced
+        /// for precise control of all type conversion.
+        /// </para>
+        /// <remarks>
+        /// Value parsers are currently only used by the Attribute API.
+        /// </remarks>
+        /// </summary>
+        public ValueParserProvider ValueParsers { get; } = new ValueParserProvider();
 
         /// <summary>
         /// Set the behavior for how to handle unrecognized arguments.

@@ -487,7 +487,7 @@ namespace McMaster.Extensions.CommandLineUtils.Tests
         {
             var cultureInfo = new CultureInfo(culture);
             var app = new CommandLineApplication<Program>();
-            app.ValueParsers.ParseCulture = cultureInfo;
+            app.ParserConfig.ValueParsers.ParseCulture = cultureInfo;
             app.Conventions.UseAttributes();
             app.Parse(option, test);
 

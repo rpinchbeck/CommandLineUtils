@@ -105,9 +105,9 @@ namespace McMaster.Extensions.CommandLineUtils.Tests
 
             var app = new CommandLineApplication<CustomParserProgram>();
 
-            app.ValueParsers.Add(new ComplexTupleParser());
-            app.ValueParsers.AddOrReplace(new MyDateTimeOffsetParser());
-            app.ValueParsers.AddOrReplace(new MyDoubleParser());
+            app.ParserConfig.ValueParsers.Add(new ComplexTupleParser());
+            app.ParserConfig.ValueParsers.AddOrReplace(new MyDateTimeOffsetParser());
+            app.ParserConfig.ValueParsers.AddOrReplace(new MyDoubleParser());
 
             app.Conventions.UseAttributes();
 
@@ -138,8 +138,8 @@ namespace McMaster.Extensions.CommandLineUtils.Tests
 
             var cultureInfo = new CultureInfo(culture);
             var app = new CommandLineApplication<DateParserProgram>();
-            app.ValueParsers.ParseCulture = cultureInfo;
-            app.ValueParsers.AddOrReplace(new MyDateTimeOffsetParser());
+            app.ParserConfig.ValueParsers.ParseCulture = cultureInfo;
+            app.ParserConfig.ValueParsers.AddOrReplace(new MyDateTimeOffsetParser());
             app.Conventions.UseAttributes();
             app.Parse(test);
 
@@ -160,7 +160,7 @@ namespace McMaster.Extensions.CommandLineUtils.Tests
 
             var app = new CommandLineApplication<CustomParserProgramOptions>();
 
-            app.ValueParsers.Add(new ComplexTupleParser());
+            app.ParserConfig.ValueParsers.Add(new ComplexTupleParser());
 
             app.Conventions.UseAttributes();
 
@@ -176,20 +176,20 @@ namespace McMaster.Extensions.CommandLineUtils.Tests
         {
             var app = new CommandLineApplication<CustomParserProgram>();
 
-            app.ValueParsers.Add(new ComplexTupleParser());
-            app.ValueParsers.AddOrReplace(new MyDateTimeOffsetParser());
-            app.ValueParsers.AddOrReplace(new MyDoubleParser());
+            app.ParserConfig.ValueParsers.Add(new ComplexTupleParser());
+            app.ParserConfig.ValueParsers.AddOrReplace(new MyDateTimeOffsetParser());
+            app.ParserConfig.ValueParsers.AddOrReplace(new MyDoubleParser());
 
             var optionMapper = CommandOptionTypeMapper.Default;
             Assert.Equal(
                 CommandOptionType.SingleValue,
-                optionMapper.GetOptionType(typeof(DateTimeOffset), app.ValueParsers));
+                optionMapper.GetOptionType(typeof(DateTimeOffset), app.ParserConfig.ValueParsers));
             Assert.Equal(
                 CommandOptionType.SingleValue,
-                optionMapper.GetOptionType(typeof(ValueTuple<int, double, string>?), app.ValueParsers));
+                optionMapper.GetOptionType(typeof(ValueTuple<int, double, string>?), app.ParserConfig.ValueParsers));
             Assert.Equal(
                 CommandOptionType.SingleValue,
-                optionMapper.GetOptionType(typeof(double), app.ValueParsers));
+                optionMapper.GetOptionType(typeof(double), app.ParserConfig.ValueParsers));
         }
 
 
@@ -218,7 +218,7 @@ namespace McMaster.Extensions.CommandLineUtils.Tests
             var expectedDate = new DateTimeOffset(2018, 02, 16, 21, 30, 33, 45, TimeSpan.FromHours(10));
 
             var app = new CommandLineApplication<CustomParserProgramAttributes>();
-            app.ValueParsers.AddOrReplace(new MyDateTimeOffsetParser());
+            app.ParserConfig.ValueParsers.AddOrReplace(new MyDateTimeOffsetParser());
             app.Conventions.UseDefaultConventions();
 
             var args = new[] { "-a", expectedDate.ToString("O"), "subcommand", "-b", expectedDate.AddSeconds(123456).ToString("O") };
@@ -238,7 +238,7 @@ namespace McMaster.Extensions.CommandLineUtils.Tests
             DateTimeOffset actualSubDate = default;
 
             var app = new CommandLineApplication();
-            app.ValueParsers.AddOrReplace(new MyDateTimeOffsetParser());
+            app.ParserConfig.ValueParsers.AddOrReplace(new MyDateTimeOffsetParser());
 
             var mainDate = app.Option<DateTimeOffset>("-a", "The main date to parse", CommandOptionType.SingleValue);
             app.Command("subcommand", configCmd =>
@@ -278,7 +278,7 @@ namespace McMaster.Extensions.CommandLineUtils.Tests
                 () =>
                 {
                     var app = new CommandLineApplication<CustomParserProgram>();
-                    app.ValueParsers.Add(new BadValueParser());
+                    app.ParserConfig.ValueParsers.Add(new BadValueParser());
                 });
 
             Assert.Contains("TargetType", ex.Message);
@@ -291,8 +291,8 @@ namespace McMaster.Extensions.CommandLineUtils.Tests
                 () =>
                 {
                     var app = new CommandLineApplication<CustomParserProgram>();
-                    app.ValueParsers.Add(new ComplexTupleParser());
-                    app.ValueParsers.Add(new ComplexTupleParser());
+                    app.ParserConfig.ValueParsers.Add(new ComplexTupleParser());
+                    app.ParserConfig.ValueParsers.Add(new ComplexTupleParser());
                 });
 
             Assert.Contains(
@@ -307,7 +307,7 @@ namespace McMaster.Extensions.CommandLineUtils.Tests
                 () =>
                 {
                     var app = new CommandLineApplication<CustomParserProgram>();
-                    app.ValueParsers.Add(null!);
+                    app.ParserConfig.ValueParsers.Add(null!);
                 });
 
             Assert.Contains("parser", ex.Message);
@@ -320,7 +320,7 @@ namespace McMaster.Extensions.CommandLineUtils.Tests
                 () =>
                 {
                     var app = new CommandLineApplication<CustomParserProgram>();
-                    app.ValueParsers.AddRange(null!);
+                    app.ParserConfig.ValueParsers.AddRange(null!);
                 });
 
             Assert.Contains("parsers", ex.Message);
@@ -333,7 +333,7 @@ namespace McMaster.Extensions.CommandLineUtils.Tests
                 () =>
                 {
                     var app = new CommandLineApplication<CustomParserProgram>();
-                    app.ValueParsers.AddOrReplace(null!);
+                    app.ParserConfig.ValueParsers.AddOrReplace(null!);
                 });
 
             Assert.Contains("parser", ex.Message);

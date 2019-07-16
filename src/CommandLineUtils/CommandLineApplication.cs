@@ -165,7 +165,6 @@ namespace McMaster.Extensions.CommandLineUtils
             Error = context.Console.Error;
             SetContext(context);
             _services = new Lazy<IServiceProvider>(() => new ServiceProvider(this));
-            ValueParsers = parent?.ValueParsers ?? new ValueParserProvider();
             UsePagerForHelpText = parent?.UsePagerForHelpText ?? true;
 
             _conventionContext = CreateConventionContext();
@@ -446,7 +445,13 @@ namespace McMaster.Extensions.CommandLineUtils
         }
 
         /// <summary>
+        /// <para>
+        /// This property has been marked as obsolete and will be removed in a future version.
+        /// The recommended replacement is <see cref="ParserConfig.ValueParsers" />.
+        /// </para>
+        /// <para>
         /// Gets the default value parser provider.
+        /// </para>
         /// <para>
         /// The value parsers control how argument values are converted from strings to other types. Additional value
         /// parsers can be added so that domain specific types can converted. In-built value parsers can also be replaced
@@ -456,7 +461,10 @@ namespace McMaster.Extensions.CommandLineUtils
         /// Value parsers are currently only used by the Attribute API.
         /// </remarks>
         /// </summary>
-        public ValueParserProvider ValueParsers { get; private set; }
+        [Obsolete("This property has been marked as obsolete and will be removed in a future version." +
+            "The recommended replacement is ParserConfig.ValueParsers")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public ValueParserProvider ValueParsers => ParserConfig.ValueParsers;
 
         /// <summary>
         /// <para>
@@ -659,7 +667,7 @@ namespace McMaster.Extensions.CommandLineUtils
         /// <returns>The option</returns>
         public CommandOption<T> Option<T>(string template, string description, CommandOptionType optionType, Action<CommandOption> configuration, bool inherited)
         {
-            var parser = ValueParsers.GetParser<T>();
+            var parser = ParserConfig.ValueParsers.GetParser<T>();
 
             if (parser == null)
             {
@@ -718,7 +726,7 @@ namespace McMaster.Extensions.CommandLineUtils
         /// <returns></returns>
         public CommandArgument<T> Argument<T>(string name, string description, Action<CommandArgument> configuration, bool multipleValues = false)
         {
-            var parser = ValueParsers.GetParser<T>();
+            var parser = ParserConfig.ValueParsers.GetParser<T>();
 
             if (parser == null)
             {
@@ -835,7 +843,7 @@ namespace McMaster.Extensions.CommandLineUtils
                 {
                     if (option is IInternalCommandParamOfT o)
                     {
-                        o.Parse(ValueParsers.ParseCulture);
+                        o.Parse(ParserConfig.ValueParsers.ParseCulture);
                     }
                 }
 
@@ -843,7 +851,7 @@ namespace McMaster.Extensions.CommandLineUtils
                 {
                     if (argument is IInternalCommandParamOfT a)
                     {
-                        a.Parse(ValueParsers.ParseCulture);
+                        a.Parse(ParserConfig.ValueParsers.ParseCulture);
                     }
                 }
 

@@ -67,7 +67,7 @@ namespace McMaster.Extensions.CommandLineUtils
 
         internal CommandOption Configure(CommandLineApplication app, PropertyInfo prop)
         {
-            var optionType = GetOptionType(prop, app.ValueParsers);
+            var optionType = GetOptionType(prop, app.ParserConfig.ValueParsers);
             CommandOption option;
             if (Template != null)
             {

@@ -195,12 +195,12 @@ namespace McMaster.Extensions.CommandLineUtils
             app.FullName = FullName;
             app.ShowInHelpText = ShowInHelpText;
 #pragma warning disable 0618
-            app.AllowArgumentSeparator = AllowArgumentSeparator;
+            app.ParserConfig.AllowArgumentSeparator = AllowArgumentSeparator;
             app.ThrowOnUnexpectedArgument = ThrowOnUnexpectedArgument;
-            app.ResponseFileHandling = ResponseFileHandling;
+            app.ParserConfig.ResponseFileHandling = ResponseFileHandling;
             app.ParserConfig.OptionsComparison = OptionsComparison;
+            app.ParserConfig.ValueParsers.ParseCulture = ParseCulture;
 #pragma warning restore 0618
-            app.ValueParsers.ParseCulture = ParseCulture;
 
             if (_clusterOptions.HasValue)
             {

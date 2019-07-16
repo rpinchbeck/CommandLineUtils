@@ -101,7 +101,7 @@ namespace McMaster.Extensions.CommandLineUtils.Conventions
             {
                 var collectionParser = CollectionParserProvider.Default.GetParser(
                     prop.PropertyType,
-                    convention.Application.ValueParsers);
+                    convention.Application.ParserConfig.ValueParsers);
                 if (collectionParser == null)
                 {
                     throw new InvalidOperationException(Strings.CannotDetermineParserType(prop));
@@ -122,7 +122,7 @@ namespace McMaster.Extensions.CommandLineUtils.Conventions
             }
             else
             {
-                var parser = convention.Application.ValueParsers.GetParser(prop.PropertyType);
+                var parser = convention.Application.ParserConfig.ValueParsers.GetParser(prop.PropertyType);
                 if (parser == null)
                 {
                     throw new InvalidOperationException(Strings.CannotDetermineParserType(prop));
@@ -142,7 +142,7 @@ namespace McMaster.Extensions.CommandLineUtils.Conventions
                             parser.Parse(
                                 argument.Name,
                                 argument.Value,
-                                convention.Application.ValueParsers.ParseCulture));
+                                convention.Application.ParserConfig.ValueParsers.ParseCulture));
                     }
                 });
             }
