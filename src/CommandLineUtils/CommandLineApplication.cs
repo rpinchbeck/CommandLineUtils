@@ -43,7 +43,7 @@ namespace McMaster.Extensions.CommandLineUtils
         /// Initializes a new instance of <see cref="CommandLineApplication"/>.
         /// </summary>
         public CommandLineApplication()
-            : this(null, DefaultHelpTextGenerator.Singleton, new DefaultCommandLineContext(), throwOnUnexpectedArg: true)
+            : this(null, DefaultHelpTextGenerator.Singleton, new DefaultCommandLineContext())
         {
         }
 
@@ -52,7 +52,7 @@ namespace McMaster.Extensions.CommandLineUtils
         /// </summary>
         /// <param name="console">The console implementation to use.</param>
         public CommandLineApplication(IConsole console)
-            : this(null, DefaultHelpTextGenerator.Singleton, new DefaultCommandLineContext(console), throwOnUnexpectedArg: true)
+            : this(null, DefaultHelpTextGenerator.Singleton, new DefaultCommandLineContext(console))
         { }
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace McMaster.Extensions.CommandLineUtils
         /// <param name="console">The console implementation to use.</param>
         /// <param name="workingDirectory">The current working directory.</param>
         public CommandLineApplication(IConsole console, string workingDirectory)
-            : this(null, DefaultHelpTextGenerator.Singleton, new DefaultCommandLineContext(console, workingDirectory), throwOnUnexpectedArg: true)
+            : this(null, DefaultHelpTextGenerator.Singleton, new DefaultCommandLineContext(console, workingDirectory))
         { }
 
         /// <summary>
@@ -71,7 +71,7 @@ namespace McMaster.Extensions.CommandLineUtils
         /// <param name="console">The console implementation to use.</param>
         /// <param name="workingDirectory">The current working directory.</param>
         public CommandLineApplication(IHelpTextGenerator helpTextGenerator, IConsole console, string workingDirectory)
-            : this(null, helpTextGenerator, new DefaultCommandLineContext(console, workingDirectory), throwOnUnexpectedArg: true)
+            : this(null, helpTextGenerator, new DefaultCommandLineContext(console, workingDirectory))
         {
         }
 
@@ -89,8 +89,9 @@ namespace McMaster.Extensions.CommandLineUtils
             "The recommended replacement is CommandLineApplication() and ParserConfig.UnrecognizedArgumentHandling")]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public CommandLineApplication(bool throwOnUnexpectedArg)
-            : this(null, DefaultHelpTextGenerator.Singleton, new DefaultCommandLineContext(), throwOnUnexpectedArg)
+            : this(null, DefaultHelpTextGenerator.Singleton, new DefaultCommandLineContext())
         {
+            ThrowOnUnexpectedArgument = throwOnUnexpectedArg;
         }
 
         /// <summary>
@@ -109,8 +110,10 @@ namespace McMaster.Extensions.CommandLineUtils
             "The recommended replacement is CommandLineApplication(IConsole, string) and ParserConfig.UnrecognizedArgumentHandling")]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public CommandLineApplication(IConsole console, string workingDirectory, bool throwOnUnexpectedArg)
-            : this(null, DefaultHelpTextGenerator.Singleton, new DefaultCommandLineContext(console, workingDirectory), throwOnUnexpectedArg)
-        { }
+            : this(null, DefaultHelpTextGenerator.Singleton, new DefaultCommandLineContext(console, workingDirectory))
+        {
+            ThrowOnUnexpectedArgument = throwOnUnexpectedArg;
+        }
 
         /// <summary>
         /// <para>
@@ -129,31 +132,25 @@ namespace McMaster.Extensions.CommandLineUtils
             "The recommended replacement is CommandLineApplication(IHelpTextGenerator, IConsole, string) and ParserConfig.UnrecognizedArgumentHandling")]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public CommandLineApplication(IHelpTextGenerator helpTextGenerator, IConsole console, string workingDirectory, bool throwOnUnexpectedArg)
-            : this(null, helpTextGenerator, new DefaultCommandLineContext(console, workingDirectory), throwOnUnexpectedArg)
+            : this(null, helpTextGenerator, new DefaultCommandLineContext(console, workingDirectory))
         {
+            ThrowOnUnexpectedArgument = throwOnUnexpectedArg;
         }
 
-        internal CommandLineApplication(CommandLineApplication parent, string name, bool throwOnUnexpectedArg)
-            : this(parent, parent._helpTextGenerator, parent._context, throwOnUnexpectedArg)
+        internal CommandLineApplication(CommandLineApplication parent)
+            : this(parent, parent._helpTextGenerator, parent._context)
         {
-            if (name != null)
-            {
-                Name = name;
-            }
+
         }
 
         internal CommandLineApplication(
             CommandLineApplication? parent,
             IHelpTextGenerator helpTextGenerator,
-            CommandLineContext context,
-            bool throwOnUnexpectedArg)
+            CommandLineContext context)
         {
             Parent = parent;
             _context = context ?? throw new ArgumentNullException(nameof(context));
             _parserConfig = parent?.ParserConfig ?? new ParserConfig();
-#pragma warning disable 0618
-            ThrowOnUnexpectedArgument = throwOnUnexpectedArg;
-#pragma warning restore 0618
             Options = new List<CommandOption>();
             Arguments = new List<CommandArgument>();
             Commands = new List<CommandLineApplication>();
@@ -567,12 +564,14 @@ namespace McMaster.Extensions.CommandLineUtils
         /// </summary>
         /// <param name="name">The word used to invoke the subcommand.</param>
         /// <param name="configuration"></param>
-        /// <param name="throwOnUnexpectedArg"></param>
         /// <returns></returns>
-        public CommandLineApplication Command(string name, Action<CommandLineApplication> configuration,
-            bool throwOnUnexpectedArg = true)
+        public CommandLineApplication Command(string name, Action<CommandLineApplication> configuration)
         {
-            var command = new CommandLineApplication(this, name, throwOnUnexpectedArg);
+            var command = new CommandLineApplication(this);
+            if (name != null)
+            {
+                command.Name = name;
+            }
 
             AddSubcommand(command);
 
@@ -586,14 +585,83 @@ namespace McMaster.Extensions.CommandLineUtils
         /// </summary>
         /// <param name="name">The word used to invoke the subcommand.</param>
         /// <param name="configuration"></param>
+        /// <typeparam name="TModel">The model type of the subcommand.</typeparam>
+        /// <returns></returns>
+        public CommandLineApplication<TModel> Command<TModel>(string name, Action<CommandLineApplication<TModel>> configuration)
+            where TModel : class
+        {
+            var command = new CommandLineApplication<TModel>(this);
+            if (name != null)
+            {
+                command.Name = name;
+            }
+
+            AddSubcommand(command);
+
+            configuration?.Invoke(command);
+
+            return command;
+        }
+        /// <summary>
+        /// <para>
+        /// This method is obsolete and will be removed in a future version.
+        /// The recommended replacement is <see cref="Command(string, Action{CommandLineApplication})" />
+        /// </para>
+        /// <para>
+        /// Adds a subcommand.
+        /// </para>
+        /// </summary>
+        /// <param name="name">The word used to invoke the subcommand.</param>
+        /// <param name="configuration"></param>
+        /// <param name="throwOnUnexpectedArg"></param>
+        /// <returns></returns>
+        [Obsolete("This method has been marked as obsolete and will be removed in a future version." +
+            "The recommended replacement is to set ParserConfig.UnrecognizedArgumentHandling")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public CommandLineApplication Command(string name, Action<CommandLineApplication> configuration,
+            bool throwOnUnexpectedArg)
+        {
+            var command = new CommandLineApplication(this);
+            command.ThrowOnUnexpectedArgument = throwOnUnexpectedArg;
+            if (name != null)
+            {
+                command.Name = name;
+            }
+
+            AddSubcommand(command);
+
+            configuration?.Invoke(command);
+
+            return command;
+        }
+
+        /// <summary>
+        /// <para>
+        /// This method is obsolete and will be removed in a future version.
+        /// The recommended replacement is <see cref="Command(string, Action{CommandLineApplication})" />
+        /// </para>
+        /// <para>
+        /// Adds a subcommand with model of type <typeparamref name="TModel" />.
+        /// </para>
+        /// </summary>
+        /// <param name="name">The word used to invoke the subcommand.</param>
+        /// <param name="configuration"></param>
         /// <param name="throwOnUnexpectedArg"></param>
         /// <typeparam name="TModel">The model type of the subcommand.</typeparam>
         /// <returns></returns>
+        [Obsolete("This method has been marked as obsolete and will be removed in a future version." +
+            "The recommended replacement is to set ParserConfig.UnrecognizedArgumentHandling")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public CommandLineApplication<TModel> Command<TModel>(string name, Action<CommandLineApplication<TModel>> configuration,
-            bool throwOnUnexpectedArg = true)
+            bool throwOnUnexpectedArg)
             where TModel : class
         {
-            var command = new CommandLineApplication<TModel>(this, name, throwOnUnexpectedArg);
+            var command = new CommandLineApplication<TModel>(this);
+            command.ThrowOnUnexpectedArgument = throwOnUnexpectedArg;
+            if (name != null)
+            {
+                command.Name = name;
+            }
 
             AddSubcommand(command);
 

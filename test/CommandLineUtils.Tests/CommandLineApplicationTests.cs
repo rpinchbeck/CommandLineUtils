@@ -317,12 +317,11 @@ namespace McMaster.Extensions.CommandLineUtils.Tests
         {
             var unexpectedArg = "UnexpectedArg";
             var app = new CommandLineApplication();
-
+            app.ParserConfig.UnrecognizedArgumentHandling = UnrecognizedArgumentHandling.StopAndCollectRemainingArguments;
             var testCmd = app.Command("test", c =>
             {
                 c.OnExecute(() => 0);
-            },
-            throwOnUnexpectedArg: false);
+            });
 
             // (does not throw)
             app.Execute("test", unexpectedArg);
@@ -350,12 +349,11 @@ namespace McMaster.Extensions.CommandLineUtils.Tests
         {
             var unexpectedOption = "--UnexpectedOption";
             var app = new CommandLineApplication();
-
+            app.ParserConfig.UnrecognizedArgumentHandling = UnrecognizedArgumentHandling.StopAndCollectRemainingArguments;
             var testCmd = app.Command("test", c =>
             {
                 c.OnExecute(() => 0);
-            },
-            throwOnUnexpectedArg: false);
+            });
 
             // (does not throw)
             app.Execute("test", unexpectedOption);
@@ -383,12 +381,11 @@ namespace McMaster.Extensions.CommandLineUtils.Tests
         {
             var unexpectedOption = "-uexp";
             var app = new CommandLineApplication();
-
+            app.ParserConfig.UnrecognizedArgumentHandling = UnrecognizedArgumentHandling.StopAndCollectRemainingArguments;
             var testCmd = app.Command("test", c =>
             {
                 c.OnExecute(() => 0);
-            },
-            throwOnUnexpectedArg: false);
+            });
 
             // (does not throw)
             app.Execute("test", unexpectedOption);
@@ -416,12 +413,11 @@ namespace McMaster.Extensions.CommandLineUtils.Tests
         {
             var unexpectedOption = "-?";
             var app = new CommandLineApplication();
-
+            app.ParserConfig.UnrecognizedArgumentHandling = UnrecognizedArgumentHandling.StopAndCollectRemainingArguments;
             var testCmd = app.Command("test", c =>
             {
                 c.OnExecute(() => 0);
-            },
-            throwOnUnexpectedArg: false);
+            });
 
             // (does not throw)
             app.Execute("test", unexpectedOption);
@@ -452,10 +448,10 @@ namespace McMaster.Extensions.CommandLineUtils.Tests
             var unexpectedOption = "--unexpected";
             CommandLineApplication? subCmd = null;
             var app = new CommandLineApplication();
-
+            app.ParserConfig.UnrecognizedArgumentHandling = UnrecognizedArgumentHandling.StopAndCollectRemainingArguments;
             var testCmd = app.Command("k", c =>
             {
-                subCmd = c.Command("run", _ => { }, throwOnUnexpectedArg: false);
+                subCmd = c.Command("run", _ => { });
                 c.OnExecute(() => 0);
             });
 

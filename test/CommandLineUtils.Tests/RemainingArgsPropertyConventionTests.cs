@@ -57,7 +57,8 @@ namespace McMaster.Extensions.CommandLineUtils.Tests
         public void ItSetsRemainingArgsOnSubcommand()
         {
             var app = Create<Parent>();
-            app.Command<RemainingArgs_Array>("subcmd", _ => { }, throwOnUnexpectedArg: false);
+            app.ParserConfig.UnrecognizedArgumentHandling = UnrecognizedArgumentHandling.StopAndCollectRemainingArguments;
+            app.Command<RemainingArgs_Array>("subcmd", _ => { });
             var result = app.Parse("subcmd", "a", "b");
             var subcmd = Assert.IsType<CommandLineApplication<RemainingArgs_Array>>(result.SelectedCommand);
             Assert.Equal(new[] { "a", "b" }, subcmd.Model.RemainingArgs);

@@ -130,8 +130,8 @@ namespace McMaster.Extensions.CommandLineUtils
             Initialize();
         }
 
-        internal CommandLineApplication(CommandLineApplication parent, string name, bool throwOnUnexpectedArg)
-            : base(parent, name, throwOnUnexpectedArg)
+        internal CommandLineApplication(CommandLineApplication parent)
+            : base(parent)
         {
             Initialize();
         }
