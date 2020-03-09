@@ -23,7 +23,7 @@ namespace Microsoft.Extensions.Hosting
         /// <summary>
         ///     Runs an instance of <typeparamref name="TApp" /> using <see cref="CommandLineApplication" /> to provide
         ///     command line parsing on the given <paramref name="args" />.  This method should be the primary approach
-        ///     taken for command line applications.
+        ///     taken for command line applications which use attributes for configuration.
         /// </summary>
         /// <typeparam name="TApp">The type of the command line application implementation</typeparam>
         /// <param name="hostBuilder">This instance</param>
@@ -67,15 +67,57 @@ namespace Microsoft.Extensions.Hosting
         }
 
         /// <summary>
-        ///     Configures an instance of <see cref="CommandLineApplication" />&lt;<typeparamref name="TApp" />&gt; when it is created.
+        ///     Runs an instance of <see cref="CommandLineApplication" /> to provide
+        ///     command line parsing on the given <paramref name="args" />.  This method should be the primary approach
+        ///     taken for command line applications which use the Builder API for configuration.
         /// </summary>
-        /// <typeparam name="TApp">The type of the command line application implementation</typeparam>
         /// <param name="hostBuilder">This instance</param>
-        /// <param name="configure">An action which configures an instance of <see cref="CommandLineApplication" />&lt;<typeparamref name="TApp" />&gt;.</param>
+        /// <param name="args">The command line arguments</param>
+        /// <param name="cancellationToken">A cancellation token</param>
+        /// <returns>A task whose result is the exit code of the application</returns>
+        public static async Task<int> RunCommandLineApplicationAsync(
+            this IHostBuilder hostBuilder, string[] args, CancellationToken cancellationToken = default)
+        {
+            var exceptionHandler = new StoreExceptionHandler();
+            var state = new CommandLineState(args);
+            hostBuilder.ConfigureServices(
+                (context, services)
+                    =>
+                {
+                    services
+                        .TryAddSingleton<IUnhandledExceptionHandler>(exceptionHandler);
+                    services
+                        .AddSingleton<IHostLifetime, CommandLineLifetime>()
+                        .TryAddSingleton(PhysicalConsole.Singleton);
+                    services
+                        .AddSingleton(provider =>
+                        {
+                            state.SetConsole(provider.GetService<IConsole>());
+                            return state;
+                        })
+                        .AddSingleton<CommandLineContext>(state)
+                        .AddSingleton<ICommandLineService, CommandLineService>();
+                });
+
+            using var host = hostBuilder.Build();
+            await host.RunAsync(cancellationToken);
+
+            if (exceptionHandler.StoredException != null)
+            {
+                ExceptionDispatchInfo.Capture(exceptionHandler.StoredException).Throw();
+            }
+
+            return state.ExitCode;
+        }
+
+        /// <summary>
+        ///     Configures an instance of <see cref="CommandLineApplication" /> when it is created.
+        /// </summary>
+        /// <param name="hostBuilder">This instance</param>
+        /// <param name="configure">An action which configures an instance of <see cref="CommandLineApplication" /></param>
         /// <returns>This instance</returns>
         /// <seealso href="https://github.com/natemcmaster/CommandLineUtils/issues/271">Builder API support</seealso>
-        public static IHostBuilder UseCommandLineApplication<TApp>(this IHostBuilder hostBuilder, Action<CommandLineApplication<TApp>, IServiceProvider> configure)
-            where TApp : class
+        public static IHostBuilder UseCommandLineApplication(this IHostBuilder hostBuilder, Action<CommandLineApplication, IServiceProvider> configure)
         {
             if (hostBuilder == null) throw new ArgumentNullException(nameof(hostBuilder));
 
